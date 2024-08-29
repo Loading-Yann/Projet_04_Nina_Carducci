@@ -133,13 +133,17 @@ body {
 .mg-prev, .mg-next {
 	width: 30px;
 	height: 30px;
-	border-radius: 00%;
+	border-radius: 50%;
 	justify-content: center;
 	align-items: center;
 	display: flex;
 	font-size: 24px;
+	background: black;
 }
 
+.modal-body {
+  position: relative; 
+}
 .quote {
 	font-family: 'Spectral';
 	font-style: italic;
