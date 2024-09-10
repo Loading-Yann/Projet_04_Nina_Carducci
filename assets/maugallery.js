@@ -129,55 +129,95 @@
       $(`#${lightboxId}`).find(".lightboxImage").attr("src", element.attr("src"));
       $(`#${lightboxId}`).modal("toggle");
     },
-
-    changeImage(direction, lightboxId) {
-      console.log(`Affichage de l'image ${direction === 'prev' ? 'précédente' : 'suivante'} dans la lightbox avec id:`, lightboxId);
-
-      // Récupérer le tag actif
-      let activeTag = $(".tags-bar span.active-tag").data("images-toggle");
-
-      // Obtenir la collection d'images selon le tag actif
-      let imagesCollection = $.fn.mauGallery.methods.getImagesCollection(activeTag);
-
-      // Obtenir l'URL de l'image active
-      let activeImageSrc = $(".lightboxImage").attr("src");
-
-      // Trouver l'index de l'image active dans la collection
-      let activeIndex = imagesCollection.findIndex(
-        (img) => img.attr("src") === activeImageSrc
-      );
-
-      // Calculer l'index de la nouvelle image en fonction de la direction
-      let newIndex;
-      if (direction === 'prev') {
-        newIndex = (activeIndex - 1 + imagesCollection.length) % imagesCollection.length;
-      } else if (direction === 'next') {
-        newIndex = (activeIndex + 1) % imagesCollection.length;
-      } else {
-        console.error("Direction inconnue:", direction);
-        return;
-      }
-
-      // Sélectionner la nouvelle image
-      let newImage = imagesCollection[newIndex];
-
-      // Mettre à jour la source de l'image dans la lightbox
-      $(".lightboxImage").attr("src", newImage.attr("src"));
-    },
-
-    getImagesCollection(activeTag) {
-      console.log("Récupération des images pour le tag:", activeTag);
-
-      let imagesCollection = [];
-
-      $(".item-column img").each(function () {
-        let $img = $(this);
-        if (activeTag === "all" || $img.data("gallery-tag") === activeTag) {
-          imagesCollection.push($img);
+    prevImage() {
+      let activeImage = null;
+      $("img.gallery-item").each(function() {
+        if ($(this).attr("src") === $(".lightboxImage").attr("src")) {
+          activeImage = $(this);
         }
       });
-
-      return imagesCollection;
+    
+      console.log("Image active (précédente): ", activeImage);
+    
+      let activeTag = $(".tags-bar span.active-tag").data("images-toggle");
+      let imagesCollection = [];
+      
+      if (activeTag === "all") {
+        $(".item-column").each(function() {
+          if ($(this).children("img").length) {
+            imagesCollection.push($(this).children("img"));
+          }
+        });
+      } else {
+        $(".item-column").each(function() {
+          if ($(this).children("img").data("gallery-tag") === activeTag) {
+            imagesCollection.push($(this).children("img"));
+          }
+        });
+      }
+    
+      console.log("Collection d'images: ", imagesCollection);
+    
+      let index = 0;
+      let previous = null;
+    
+      $(imagesCollection).each(function(i) {
+        if ($(activeImage).attr("src") === $(this).attr("src")) {
+          index = i;
+        }
+      });
+    
+      // Aller à l'image précédente
+      previous = imagesCollection[index - 1] || imagesCollection[imagesCollection.length - 1];
+    
+      console.log("Image précédente : ", previous);
+    
+      $(".lightboxImage").attr("src", $(previous).attr("src"));
+    },
+    nextImage() {
+      let activeImage = null;
+      $("img.gallery-item").each(function() {
+        if ($(this).attr("src") === $(".lightboxImage").attr("src")) {
+          activeImage = $(this);
+        }
+      });
+    
+      console.log("Image active (suivante) : ", activeImage);
+    
+      let activeTag = $(".tags-bar span.active-tag").data("images-toggle");
+      let imagesCollection = [];
+      
+      if (activeTag === "all") {
+        $(".item-column").each(function() {
+          if ($(this).children("img").length) {
+            imagesCollection.push($(this).children("img"));
+          }
+        });
+      } else {
+        $(".item-column").each(function() {
+          if ($(this).children("img").data("gallery-tag") === activeTag) {
+            imagesCollection.push($(this).children("img"));
+          }
+        });
+      }
+    
+      console.log("Collection d'images : ", imagesCollection);
+    
+      let index = 0;
+      let next = null;
+    
+      $(imagesCollection).each(function(i) {
+        if ($(activeImage).attr("src") === $(this).attr("src")) {
+          index = i;
+        }
+      });
+    
+      // Aller à l'image suivante
+      next = imagesCollection[index + 1] || imagesCollection[0];
+    
+      console.log("Image suivante : ", next);
+    
+      $(".lightboxImage").attr("src", $(next).attr("src"));
     },
 
     createLightBox(gallery, lightboxId, navigation) {
@@ -225,6 +265,7 @@
       console.log("Filtrage des éléments par tag:", $(this).data("images-toggle"));
 
       $(".active-tag").removeClass("active active-tag");
+      $(this).addClass("active active-tag");
       $(this).addClass("active active-tag");
 
       var tag = $(this).data("images-toggle");
