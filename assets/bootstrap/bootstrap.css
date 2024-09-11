@@ -5508,7 +5508,7 @@ textarea.form-control-lg {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  margin: auto;
   pointer-events: auto;
   background-color: #fff;
   background-clip: padding-box;
@@ -5576,7 +5576,7 @@ textarea.form-control-lg {
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 500px;
+    display:flex ;
     margin: 1.75rem auto;
   }
 
