@@ -258,10 +258,16 @@ input[type="submit"] {
 		margin-top: 0;
 		margin-bottom: 1em;
 	}
-	 #about-me p {
+#about-me p {
 		width: 100%;
 	}
 }
+@font-face {
+  font-family: 'Inter';
+  src: url('path/to/inter.woff2') format('woff2');
+  font-display: swap;
+}
+
 
 @media all and (max-width: 1000px) {
 	#about{
